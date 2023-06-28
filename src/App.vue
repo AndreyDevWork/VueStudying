@@ -3,11 +3,6 @@
   <div class="app">
     <h1>Страница с постами</h1>
     <my-button
-    @click="fetchPosts"
-    >
-      Получить посты
-    </my-button>
-    <my-button
       class="app__btn"
       @click="showDialog"
     >
@@ -73,9 +68,11 @@ export default {
       } catch (e) {
         alert('ошибка')
       }
-    }
-
-  }
+    },
+  },
+  mounted() {
+    this.fetchPosts();
+  },
 
 }
 
@@ -96,7 +93,6 @@ export default {
 .app__btn {
   margin-top: 15px;
   margin-bottom: 15px;
-  margin-left: 10px;
 }
 
 </style>
