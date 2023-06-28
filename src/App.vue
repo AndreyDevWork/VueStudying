@@ -1,10 +1,20 @@
 <!-- Чем слабо связаннее компоненты , тем масштабируемее будет приложение -->
 <template>
   <div class="app">
-    <PostForm
-      @create="createPost"
+    <h1>Страница с постами</h1>
+    <my-button
+      class="app__btn"
+      @click="showDialog"
+    >
+      Создать пользователя
+    </my-button>
+    <my-dialog 
+      v-model:show="dialogVisible">
+      <PostForm
+        @create="createPost"
       >
-    </PostForm>
+      </PostForm>
+    </my-dialog>
     <PostList 
       :posts="posts"
       @remove="removePost"
@@ -21,26 +31,40 @@ import PostForm from "./components/PostForm";
 
 
 export default {
+
   components: {
+
     PostList, PostForm
+
   },
+
   data() {
     return {
+
       posts: [
         {id: 1, title: 'JavaScript', body: 'Описание поста'},
         {id: 2, title: 'JavaScript', body: 'Описание поста 2'},
         {id: 3, title: 'JavaScript', body: 'Описание поста 3'},
       ],
+      dialogVisible: false,
+
     }
   },
+
   methods: {
+
     createPost(post) {
       this.posts.push(post);
+      this.dialogVisible = false;
     },
     removePost(post) {
       this.posts = this.posts.filter(p => p.id !== post.id)
+    },
+    showDialog() {
+      this.dialogVisible = true;
     }
   }
+
 }
 
 </script>
@@ -55,6 +79,11 @@ export default {
 
 .app {
   padding: 20px;
+}
+
+.app__btn {
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 </style>
