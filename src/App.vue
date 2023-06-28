@@ -2,6 +2,7 @@
 <template>
   <div class="app">
     <h1>Страница с постами</h1>
+    <input type="text" v-model.trim="modificatorValue">
     <my-button
       class="app__btn"
       @click="showDialog"
@@ -47,7 +48,7 @@ export default {
         {id: 3, title: 'JavaScript', body: 'Описание поста 3'},
       ],
       dialogVisible: false,
-
+      modificatorValue: '',
     }
   },
 
