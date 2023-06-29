@@ -3,6 +3,7 @@ import { createRouter, createWebHashHistory } from "vue-router"
 import Main from '@/pages/Main'
 import PostPages from '@/pages/PostPages'
 import About from '@/pages/About'
+import PostIdPage from '@/pages/PostIdPage'
 
 const routes = [
   {
@@ -16,6 +17,10 @@ const routes = [
   {
     path: '/about',
     component: About
+  },
+  {
+    path: '/posts/:id',
+    component: PostIdPage
   },
 ]
 
