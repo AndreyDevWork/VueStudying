@@ -30,6 +30,19 @@
       v-if="!isPostLoading"
     />     
     <div v-else>Идет загрузка...</div> 
+    <div class="page__wrapper">
+      <div 
+        v-for="pageNumber in totaPages"
+        :key="pageNumber"
+        class="page"
+        :class="{
+          'current-page': page === pageNumber
+        }"
+        @click="changePage(pageNumber)"
+      >
+        {{ pageNumber }}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -58,6 +71,9 @@ export default {
       isPostLoading: false,
       selectedSort: '',
       searchQuery: '',
+      page: 1,
+      limit: 10,
+      totaPages: 0,
       sortOptions: [
         {value: 'title', name: 'По названию'},
         {value: 'body', name: 'По содержанию'}
@@ -80,7 +96,13 @@ export default {
     async fetchPosts() {
       try {
         this.isPostLoading = true;
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10')
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+          params: {
+          _page: this.page,
+          _limit: this.limit,
+          }
+        });
+        this.totaPages = Math.ceil(response.headers['x-total-count'] / this.limit)
         this.posts = response.data;
       } catch (e) {
         alert('ошибка')
@@ -88,6 +110,10 @@ export default {
         this.isPostLoading = false;
       }
     },
+    changePage(pageNumber) {
+      this.page = pageNumber
+
+    }
   },
   mounted() {
     this.fetchPosts();
@@ -100,6 +126,11 @@ export default {
       return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
     }
   },
+  watch: {
+    page() {
+      this.fetchPosts()
+    }
+  }
 
 }
 
@@ -121,6 +152,21 @@ export default {
   margin: 15px 0;
   display: flex;
   justify-content: space-between;
+}
+
+.page__wrapper {
+  display: flex;
+  margin-top: 15px;
+}
+
+.page {
+  border: 1px solid teal;
+  padding: 10px;
+  margin-left: 5px;
+}
+
+.current-page {
+  border: 2px solid rgb(0, 0, 0);
 }
 
 </style>
