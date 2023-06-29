@@ -3,6 +3,7 @@
   <div>
     <h1>Страница с постами</h1>
     <my-input
+      v-focus
       v-model="searchQuery"
       placeholder="Поиск...."
     />
@@ -30,7 +31,7 @@
       v-if="!isPostLoading"
     />     
     <div v-else>Идет загрузка...</div> 
-    <div ref="observer" class="observer"></div>
+    <div v-intersection="loadMorePosts" class="observer"></div>
   </div>
 </template>
 
@@ -59,7 +60,7 @@ export default {
       isPostLoading: false,
       selectedSort: '',
       searchQuery: '',
-      page: 1,
+      page: 0,
       limit: 10,
       totaPages: 0,
       sortOptions: [
@@ -114,22 +115,7 @@ export default {
       }
     },
   },
-  mounted() {
-    this.fetchPosts();
-    this.$refs.observer
-    const options = {
-    rootMargin: '0px',
-    threshold: 1.0
-    }
-    const callback = (entries, observer) => {
-        if(entries[0].isIntersecting && this.page < this.totaPages) {
-          this.loadMorePosts()
-        }
-    };
-    const observer = new IntersectionObserver(callback, options);
-    observer.observe(this.$refs.observer)
 
-  },
   computed: {
     sortedPosts() {
       return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
